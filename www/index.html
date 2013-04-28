@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi">
+    <link rel="stylesheet" type="text/css" href="css/bb/lists.css">
+    <link rel="stylesheet" type="text/css" href="css/bb/input_areas.css">
+    <link rel="stylesheet" type="text/css" href="css/bb/progress_activity.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <title>Translator</title>
+  </head>
+  <body role="application">
+    <h2 class="bb-docs">&nbsp;<!-- this is a spacer for layout purposes --></h2>
+    <section role="region">
+      <header></header>
+      <!-- ko with: search -->
+      <form id="search" role="search" class="bottom"
+            data-bind="submit: search">
+        <div>
+          <select name="dict" tabindex="2" id="dictselect"
+                  class="settings-option icon icon-dialog">
+            <option value="enes">English -&gt; Spanish</option>
+            <option value="enfr">English -&gt; French</option>
+            <option value="enit">English -&gt; Italian</option>
+            <option value="enpt">English -&gt; Portuguese</option>
+            <option value="enpl">English -&gt; Polish</option>
+            <option value="enro">English -&gt; Romanian</option>
+            <option value="engr">English -&gt; Greek</option>
+            <option value="enzh">English -&gt; Chinese</option>
+            <option value="enja">English -&gt; Japanese</option>
+            <option value="enko">English -&gt; Korean</option>
+            <option value="encz">English -&gt; Czech</option>
+            <option value="entr">English -&gt; Turkish</option>
+            <option value="enar">English -&gt; Arabic</option>
+          </select>
+        </div>
+        <button type="submit">Go</button>
+        <p>
+          <input name="word" type="text" placeholder="Enter word or phrase"
+                 data-bind="value: term" required>
+        </p>
+      </form>
+      <!-- /ko -->
+      <div id="loader">
+        <div class="spinner"></div>
+      </div>
+      <!-- ko with: results -->
+      <section data-type="list" id="results" data-bind="visible: results().length > 0">
+        <div data-bind="foreach: results()">
+          <ul data-bind="foreach: PrincipalTranslations">
+            <li>
+              <a href="#">
+                <p data-bind="text: FirstTranslation.term"></p>
+                <p><span data-bind="text: FirstTranslation.POS"></span></p>
+              </a>
+            </li>
+          </ul>
+          <header></header>
+          <ul data-bind="foreach: AdditionalTranslations">
+            <li>
+              <a href="#">
+                <p data-bind="text: FirstTranslation.term"></p>
+                <p>
+                  <span data-bind="text: FirstTranslation.POS"></span>
+                </p>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <!-- /ko -->
+    </section>
+    <script type="text/javascript" src="js/lib/knockout-2.2.1.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+  </body>
+</html>
