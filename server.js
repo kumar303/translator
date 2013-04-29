@@ -18,6 +18,8 @@ app.configure(function() {
 
 // Placeholder for word reference
 app.get('/fake-results', function (req, res) {
+  setTimeout(function() {
+
   res.send({
 "term0" : {
 "PrincipalTranslations" : {
@@ -260,6 +262,8 @@ app.get('/fake-results', function (req, res) {
 		"FirstTranslation" : {"term" : "sin pies ni cabeza", "POS" : "", "sense" : ""}, "Note" : ""}}},
 "Lines" : "End Reached", "END" : true
 });
+
+  }, 300);
 
 });
 
