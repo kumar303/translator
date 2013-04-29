@@ -25,8 +25,14 @@ var events = {
 
 function Search() {
   var self = this;
+  this._urlPrefix = 'http://api.wordreference.com/0.8/';
   this.term = ko.observable("");
   this.dict = ko.observable("");
+  this.externalLink = ko.computed(function _externalLink() {
+    var url = self._urlPrefix + self.apiKey +
+              '/' + self.dict() + '/' + encodeURIComponent(self.term());
+    return url;
+  });
   ko.computed(function _watchDict() {
     events.trigger('newLangDict', {dict: self.dict()});
   });
@@ -43,8 +49,8 @@ Search.prototype.wakeUp = function _wakeUp() {
 
 Search.prototype.search = function _search() {
   events.trigger('loadstart');
-  var url = 'http://api.wordreference.com/0.8/' + this.apiKey +
-            '/json/' + this.dict() + '/' + encodeURIComponent(this.term());
+  var url = this._urlPrefix + this.apiKey + '/json/' + this.dict() +
+            '/' + encodeURIComponent(this.term());
   console.log('search URL', url);
   $.ajax({url: url, dataType: 'jsonp'})
     .done(function(data, textStatus, jqXHR) {

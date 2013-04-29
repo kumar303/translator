@@ -69,7 +69,14 @@
           <header></header>
         </div>
         <div id="results-footer">
-          (c) <a target="_blank" href="http://wordreference.com/">wordreference.com</a>
+          <p>
+            <a data-bind="text: $parent._('Get more information on this translation.'),
+                          attr: {href: $parent.search.externalLink()}"
+               target="_blank"></a>
+          </p>
+          <p>
+            &copy; <a target="_blank" href="http://wordreference.com/">wordreference.com</a>
+          </p>
         </div>
       </section>
       <!-- /ko -->
