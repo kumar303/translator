@@ -69,7 +69,9 @@
       <a href="#">
         <p data-bind="text: term"></p>
         <p>
-          (<span data-bind="text: POS"></span>)
+          <span data-bind="if: POS">
+            (<span data-bind="text: POS"></span>)
+          </span>
           <span data-bind="text: sense"></span>
         </p>
       </a>
