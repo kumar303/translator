@@ -1,0 +1,14 @@
+{"name": "Translator",
+ "description": "Translate a word or phrase to and from English between many languages",
+ "version": "1.0",
+ "developer": {"name": "Kumar McMillan",
+               "url": "https://github.com/kumar303/"},
+ "launch_path": "/translator/index.html",
+ "icons": {
+     "128": "/translator/img/icons/icon_128.png",
+     "64": "/translator/img/icons/icon_64.png",
+     "48": "/translator/img/icons/icon_48.png",
+     "32": "/translator/img/icons/icon_32.png"
+  },
+ "default_locale": "en",
+ "installs_allowed_from": ["*"]}
