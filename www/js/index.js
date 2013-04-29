@@ -22,6 +22,10 @@ function Search() {
 
 Search.prototype.wakeUp = function _wakeUp() {
   document.querySelector('#term').focus();
+  var lastDict = window.localStorage.getItem('dict');
+  if (lastDict) {
+    this.dict(lastDict);
+  }
 };
 
 Search.prototype.search = function _search() {
@@ -60,6 +64,7 @@ Search.prototype.search = function _search() {
       console.log('Failed to get results:', textStatus, errorThrown);
       console.log(jqXHR);
     });
+  window.localStorage.setItem('dict', this.dict());
 };
 
 
