@@ -11,15 +11,14 @@
     <title>Translator</title>
   </head>
   <body role="application">
-    <h2 class="bb-docs">&nbsp;<!-- this is a spacer for layout purposes --></h2>
     <section role="region">
-      <header></header>
       <!-- ko with: search -->
       <form id="search" role="search" class="bottom"
             data-bind="submit: search">
         <div>
           <select name="dict" tabindex="2" id="dictselect"
-                  class="settings-option icon icon-dialog">
+                  class="settings-option icon icon-dialog"
+                  data-bind="value: dict">
             <option value="enes">English -&gt; Spanish</option>
             <option value="enfr">English -&gt; French</option>
             <option value="enit">English -&gt; Italian</option>
@@ -35,43 +34,45 @@
             <option value="enar">English -&gt; Arabic</option>
           </select>
         </div>
+        <!--
+        <button type="submit" data-bind="text: loc.tr()['Go']"></button>
+        -->
         <button type="submit">Go</button>
         <p>
-          <input name="word" type="text" placeholder="Enter word or phrase"
+          <input id="term" type="text" placeholder="Enter word or phrase"
                  data-bind="value: term" required>
         </p>
       </form>
       <!-- /ko -->
-      <div id="loader">
-        <div class="spinner"></div>
-      </div>
       <!-- ko with: results -->
+      <div id="loader" data-bind="visible: loading()">
+        <progress></progress>
+      </div>
       <section data-type="list" id="results" data-bind="visible: results().length > 0">
         <div data-bind="foreach: results()">
-          <ul data-bind="foreach: PrincipalTranslations">
-            <li>
-              <a href="#">
-                <p data-bind="text: FirstTranslation.term"></p>
-                <p><span data-bind="text: FirstTranslation.POS"></span></p>
-              </a>
-            </li>
+          <ul>
+            <li data-bind="template: {name: 'term-list-item', data: OriginalTerm}"></li>
+            <li data-bind="template: {name: 'term-list-item', data: FirstTranslation}"></li>
           </ul>
           <header></header>
-          <ul data-bind="foreach: AdditionalTranslations">
-            <li>
-              <a href="#">
-                <p data-bind="text: FirstTranslation.term"></p>
-                <p>
-                  <span data-bind="text: FirstTranslation.POS"></span>
-                </p>
-              </a>
-            </li>
-          </ul>
+        </div>
+        <div id="results-footer">
+          (c) <a target="_blank" href="http://wordreference.com/">wordreference.com</a>
         </div>
       </section>
       <!-- /ko -->
     </section>
+    <script type="text/javascript" src="js/lib/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="js/lib/knockout-2.2.1.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/html" id="term-list-item">
+      <a href="#">
+        <p data-bind="text: term"></p>
+        <p>
+          (<span data-bind="text: POS"></span>)
+          <span data-bind="text: sense"></span>
+        </p>
+      </a>
+    </script>
   </body>
 </html>

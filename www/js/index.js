@@ -1,83 +1,112 @@
 var events = {
-  _target: null,
+  _ns: 'local',
+  _doc: $(document),
   trigger: function _eventsTrigger(name, opt) {
-    if (!this._target) this.makeTarget();
-    var init = opt ? {detail: opt} : null;
-    var event = new CustomEvent(name, init);
-    this._target.dispatchEvent(event);
+    name = name + '.' + this._ns;
+    var init = opt ? {detail: opt} : {};
+    init['type'] = name;
+    this._doc.trigger(init);
   },
   on: function _eventsOn(name, handler) {
-    if (!this._target) this.makeTarget();
-    this._target.addEventListener(name, handler);
-  },
-  makeTarget: function _eventsMakeTarget() {
-    // Make an orphaned element to stop any unecessary bubbling work.
-    this._target = document.createElement('div');
-    this._target.attributes.id = 'omni_events_dispatch';
+    name = name + '.' + this._ns;
+    this._doc.on(name, handler);
   }
 };
 
 
 function Search() {
   this.term = ko.observable("");
+  this.dict = ko.observable("");
+  this.apiKey = '460cd';
 };
 
 Search.prototype.wakeUp = function _wakeUp() {
+  document.querySelector('#term').focus();
 };
 
 Search.prototype.search = function _search() {
-  console.log('searching', this.term());
-  var req = new XMLHttpRequest();
-  req.onload = function() {
-    if (this.status == 200) {
-      // FIXME: there is a way to do this in XHR
-      var results = JSON.parse(this.responseText);
-      var normResults = [];
-      for (var termKey in results) {
-        if (termKey.substr(0, 4) != 'term') {
-          continue;
-        }
-        // results.term0
-        var ob = results[termKey];
-        var term = {};
-        for (var transKey in ob) {
-          term[transKey] = [];
-          for (var arrKey in ob[transKey]) {
-            term[transKey].push(ob[transKey][arrKey]);
+  events.trigger('loadstart');
+  var url = 'http://api.wordreference.com/0.8/' + this.apiKey +
+            '/json/' + this.dict() + '/' + encodeURIComponent(this.term());
+  console.log('search URL', url);
+  $.ajax({url: url, dataType: 'jsonp'})
+    .done(function(data, textStatus, jqXHR) {
+      try {
+        console.log('received data');
+        var normResults = [];
+        for (var termKey in data) {
+          if (termKey.substr(0, 4) != 'term') {
+            continue;
+          }
+          // data.term0
+          var ob = data[termKey];
+          for (var transKey in ob) {
+            // PrincipalTranslations, AdditionalTranslations
+            for (var arrKey in ob[transKey]) {
+              var tr = ob[transKey][arrKey];
+              normResults.push(tr);
+            }
           }
         }
-        normResults.push(term);
+        console.log('triggering results event');
+        events.trigger('results', {results: normResults});
+      } catch (e) {
+        // Something is swallowing this. Rage.
+        console.log('exception:', e);
+        throw(e);
       }
-      events.trigger('results', {results: normResults});
-    } else {
-      console.log('Failed: code: ' + this.status + ' response: ' + this.responseText);
-    }
-  };
-  req.onerror = function() {
-    console.log('Failed to get results');
-  }
-  req.open('GET', '/fake-results', true);
-  req.send();
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+      console.log('Failed to get results:', textStatus, errorThrown);
+      console.log(jqXHR);
+    });
 };
 
 
 function Results() {
   this.results = ko.observableArray([]);
+  this.loading = ko.observable(false);
 };
 
 Results.prototype.wakeUp = function _wakeUp() {
   var self = this;
+
+  events.on('loadstart', function _loadStart() {
+    self.results([]);
+    self.loading(true);
+    // Something is going on with cached jsonp callbacks. This is a hack.
+    setTimeout(function _checkResults() {
+      console.log('check results');
+      if (self.results().length) {
+        self.loading(false);
+      }
+    }, 200);
+  });
+
   events.on('results', function _results(evt) {
     console.log('got results', evt.detail.results);
     self.results(evt.detail.results);
+    self.loading(false);
   });
-}
+};
+
+
+function Loc() {
+  this.tr = ko.observable({
+    'Go': 'Go',
+    'Enter word or phrase': 'Enter word or phrase'
+  });
+};
+
+Loc.prototype.wakeUp = function _wakeUp() {
+};
 
 
 document.addEventListener('DOMContentLoaded', function _onLoad() {
   var viewModel = {
     search: new Search(),
-    results: new Results()
+    results: new Results(),
+    loc: new Loc()
   };
   for (var attr in viewModel) {
     // This is a hook for views to trigger events after everyone else

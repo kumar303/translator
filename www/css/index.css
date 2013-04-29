@@ -28,6 +28,22 @@ h2.bb-docs {
     clear: both;
 }
 
+#loader {
+    margin: 1em;
+    text-align: center;
+}
+
+#results-footer {
+    font-family: "MozTT", Sans-serif;
+    color: #666;
+    font-size: 1.2rem;
+    margin: 1em 0;
+}
+
+#results-footer a {
+    color: #666;
+}
+
 /* overrides to bb input_area */
 form[role="search"] {
     height: auto;
