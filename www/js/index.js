@@ -17,7 +17,7 @@ var events = {
 function Search() {
   this.term = ko.observable("");
   this.dict = ko.observable("");
-  this.apiKey = '460cd';
+  this.apiKey = '460cd';  // Word reference API key.
 };
 
 Search.prototype.wakeUp = function _wakeUp() {
