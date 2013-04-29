@@ -36,25 +36,23 @@
             <option value="aren">Arabic -&gt; English</option>
             <option value="zhen">Chinese -&gt; English</option>
             <option value="czen">Czech -&gt; English</option>
-            <option value="fren">French -&gt; English</option>
-            <option value="gren">Greek -&gt; English</option>
+            <option value="esen">Español -&gt; Inglés</option>
+            <option value="fren">Français -&gt; Anglais</option>
+            <option value="gren">ελληνικά -&gt; Αγγλικά</option>
             <option value="koen">Korean -&gt; English</option>
             <option value="iten">Italian -&gt; English</option>
             <option value="jaen">Japanese -&gt; English</option>
-            <option value="plen">Polish -&gt; English</option>
-            <option value="pten">Portuguese -&gt; English</option>
+            <option value="plen">Polski -&gt; Angielski</option>
+            <option value="pten">Português -&gt; Inglês</option>
             <option value="roen">Romanian -&gt; English</option>
-            <option value="esen">Spanish -&gt; English</option>
             <option value="tren">Turkish -&gt; English</option>
           </select>
         </div>
-        <!--
-        <button type="submit" data-bind="text: loc.tr()['Go']"></button>
-        -->
-        <button type="submit">Go</button>
+        <button type="submit" data-bind="text: $parent._('Go')"></button>
         <p>
-          <input id="term" type="text" placeholder="Enter word or phrase"
-                 data-bind="value: term" required>
+          <input id="term" type="text"
+                 data-bind="attr: {placeholder: $parent._('Enter word or phrase')},
+                            value: term" required>
         </p>
       </form>
       <!-- /ko -->
