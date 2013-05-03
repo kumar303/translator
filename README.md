@@ -12,7 +12,7 @@ from Github Pages.
 
 ## Hack on it
 
-To simulate serving static content from Github pages to Firefo OS
+To simulate serving static content from Github pages to Firefox OS
 you can run a simple NodeJS server:
 
     git clone https://github.com/kumar303/translator.git
