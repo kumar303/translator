@@ -3,6 +3,8 @@
 A web app for [Firefox OS](https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS)
 that lets you translate words or phrases from English to other languages (and the
 reverse).
+It uses the [Word Reference API](http://www.wordreference.com/docs/api.aspx)
+to do the translations.
 
 ## Run it
 
@@ -19,7 +21,7 @@ you can run a simple NodeJS server:
     cd translator
 
 You need to link to [gaia](https://github.com/mozilla-b2g/gaia/)
-to get the shared styles for local development.
+to get the shared styles for local development and deployment.
 Either set a path to `$GAIA` in your environment or fetch the submodule:
 
     git submodule update --init
@@ -38,6 +40,9 @@ or [launch it](http://0.0.0.0:3000/translator/) from your local web server.
 
 ## Deploy to Github Pages
 
-To deploy the code to Github Pages run this:
+To deploy the code to [Github Pages](http://pages.github.com/) run this:
 
     volo build && volo ghdeploy
+
+This copies all `www` files and all `gaia/shared` files into `www-built`
+which is then set as your Github Pages root directory.
