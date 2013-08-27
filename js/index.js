@@ -33,6 +33,7 @@ function Search() {
               '/' + self.dict() + '/' + encodeURIComponent(self.term());
     return url;
   });
+
   ko.computed(function _watchDict() {
     events.trigger('newLangDict', {dict: self.dict()});
   });
@@ -40,10 +41,27 @@ function Search() {
 };
 
 Search.prototype.wakeUp = function _wakeUp() {
+  var defaultLang;
+  var defaultDict = 'esen';
   document.querySelector('#term').focus();
+
   var lastDict = window.localStorage.getItem('dict');
   if (lastDict) {
+    console.log('setting default from local storage', lastDict);
     this.dict(lastDict);
+  } else {
+    // Try to guess the right language to start with.
+    defaultLang = navigator.language && navigator.language.split('-')[0];
+    console.log('setting default from lang', defaultLang);
+    if (defaultLang) {
+      // Pick the native language translating to English.
+      defaultDict = defaultLang + 'en';
+      if (defaultLang == 'en') {
+        // Special case when the native language is English.
+        defaultDict = 'enes';
+      }
+    }
+    this.dict(defaultDict);
   }
 };
 
@@ -88,12 +106,9 @@ Search.prototype.search = function _search() {
 
 
 function Results() {
+  var self = this;
   this.results = ko.observableArray([]);
   this.loading = ko.observable(false);
-};
-
-Results.prototype.wakeUp = function _wakeUp() {
-  var self = this;
 
   events.on('loadstart', function _loadStart() {
     self.results([]);
@@ -114,11 +129,14 @@ Results.prototype.wakeUp = function _wakeUp() {
   });
 };
 
+Results.prototype.wakeUp = function _wakeUp() {
+};
+
 
 function Loc() {
   var self = this;
 
-  this.locales = {
+  self.locales = {
     'en': {
       'Go': 'Go',
       'Enter word or phrase': 'Enter word or phrase'
@@ -144,15 +162,13 @@ function Loc() {
       'Enter word or phrase': 'Entrez un mot ou une phrase'
     }
   };
-  self._default = 'en';
+
+  // This default isn't really used. See Search.wakeUp() for how the default language gets set.
+  self._default = 'es';
   self.activeDict = ko.observable(self._default);
   self.dict = ko.computed(function _computedDict() {
     return self.locales[self.activeDict()];
   });
-};
-
-Loc.prototype.wakeUp = function _wakeUp() {
-  var self = this;
 
   events.on('newLangDict', function _onNewLangDict(evt) {
     var dict = evt.detail.dict.substr(0, 2);  // Get the origin lang code.
@@ -167,6 +183,9 @@ Loc.prototype.wakeUp = function _wakeUp() {
       self.activeDict(dict);
     }
   });
+};
+
+Loc.prototype.wakeUp = function _wakeUp() {
 };
 
 Loc.prototype.translate = function _translate(key) {
