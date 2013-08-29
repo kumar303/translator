@@ -9,11 +9,15 @@
      "name": "Tłumacz",
      "description": "Przetłumacz słowo lub frazę do iz angielskiego między wielu językach"
    },
+   "pt-br": {
+     "name": "Tradutor",
+     "description": "Traduzir uma palavra ou frase de e para Inglês entre muitas línguas"
+   },
    "pt": {
      "name": "Tradutor",
      "description": "Traduzir uma palavra ou frase de e para Inglês entre muitas línguas"
    },
-   "gr": {
+   "el": {
      "name": "Μεταφραστής",
      "description": "Μεταφράστε μια λέξη ή φράση και από τα αγγλικά μεταξύ πολλών γλωσσών"
    },
