@@ -1,5 +1,7 @@
 # Translator
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/kumar303/translator.svg)](https://greenkeeper.io/)
+
 A web app for [Firefox OS](https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS)
 that lets you translate words or phrases from English to other languages (and the
 reverse).
